@@ -264,3 +264,6 @@ JAZZMIN_SETTINGS = {
     },
     # Add a language dropdown into the admin
 }
+
+
+CSRF_TRUSTED_ORIGINS = ["https://*.ngrok-free.app/"]
