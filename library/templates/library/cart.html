@@ -1,0 +1,213 @@
+{% extends 'base.html' %} {% block head%}
+<script
+  src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"
+></script>
+{% endblock %} {% block content %} {% if cart_items %}
+<dir class="row">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th>Books</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in cart_items %}
+              <tr>
+                <td>
+                  <div class="d-flex gap-2 align-items-center">
+                    <div>
+                      <img
+                        src="{{item.book.cover_image}}"
+                        alt=""
+                        srcset=""
+                        height="90"
+                      />
+                    </div>
+                    <div>
+                      <p>{{item.book.title}}</p>
+                    </div>
+                  </div>
+                </td>
+                <td>{{item.book.price}}</td>
+                <td>
+                  <div class="d-flex gap-2">
+                    {% if item.quantity > 1%}
+                    <button
+                      data-id="{{item.id}}"
+                      class="btn btn-light btn-sm decrement"
+                    >
+                      <i class="bi-dash"></i>
+                    </button>
+                    {% else %}
+                    <button
+                      data-id="{{item.id}}"
+                      class="btn btn-light btn-sm disabled decrement"
+                    >
+                      <i class="bi-dash"></i>
+                    </button>
+                    {% endif %} {{item.quantity}}
+                    <button
+                      data-id="{{item.id}}"
+                      class="btn btn-light btn-sm increment"
+                    >
+                      <i class="bi-plus"></i>
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <button
+                    data-id="{{item.id}}"
+                    class="btn btn-danger btn-sm delete-item"
+                  >
+                    <i class="bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 mt-4 mt-lg-0">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title mb-3">Cart Summary</h5>
+        {% for i in cart_items %}
+        <div class="row border-bottom align-items-center py-2">
+          <div class="col-8">
+            <p class="mb-0" style="max-width: 80%">
+              {{i.book.title}}&nbsp;x&nbsp;{{i.quantity}}
+            </p>
+          </div>
+          <div class="col-4">
+            <p class="mb-0">{{i.total_price | floatformat:2}}</p>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="row border-bottom align-items-center py-2">
+          <div class="col-8">
+            <p class="mb-0 fw-bold" style="max-width: 80%">Subtotal</p>
+          </div>
+          <div class="col-4">
+            <p class="mb-0">{{total.total | floatformat:2}}</p>
+          </div>
+        </div>
+        <div class="mt-4 d-flex">
+          <button class="btn btn-primary">Order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</dir>
+
+{% else %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center">
+          <i class="bi-cart-x fs-1 text-secondary"></i>
+          <h5 class="mt-2">Your cart is empty</h5>
+          <p class="text-sm text-secondary">
+            Looks like no books in your cart!
+          </p>
+          <p class="mb-0">
+            <a href="{% url 'home' %}">Continue Shopping</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% block script %}
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  function send_data(data) {
+    $.ajax({
+      url: "/edit-cart-item/",
+      method: "POST",
+      data: data,
+    }).done(() => {
+      location.reload();
+    });
+  }
+
+  $(".decrement").click((e) => {
+    let btn = $(e.currentTarget);
+    const cartItemId = btn.attr("data-id");
+    const action = "DECREMENT";
+    send_data({
+      cart_item_id: cartItemId,
+      action: action,
+      csrfmiddlewaretoken: getCookie("csrftoken"),
+    });
+  });
+
+  $(".increment").click((e) => {
+    let btn = $(e.currentTarget);
+    const cartItemId = btn.attr("data-id");
+    const action = "INCREMENT";
+    send_data({
+      cart_item_id: cartItemId,
+      action: action,
+      csrfmiddlewaretoken: getCookie("csrftoken"),
+    });
+  });
+
+  // delete data
+  $(".delete-item").click((e) => {
+    let btn = $(e.currentTarget);
+    const cartItemId = btn.attr("data-id");
+    const action = "DELETE";
+    send_data({
+      cart_item_id: cartItemId,
+      action: action,
+      csrfmiddlewaretoken: getCookie("csrftoken"),
+    });
+    // $.ajax({
+    //   url: "/edit-cart-item/",
+    //   method: "POST",
+    //   data: {
+    //     cart_item_id: cartItemId,
+    //     action: "DELETE",
+    //     csrfmiddlewaretoken: getCookie("csrftoken"),
+    //   },
+    // });
+    // const action = "DECREMENT";
+    // const quantity = 1;
+    // send_data({
+    //   cart_item_id: cartItemId,
+    //   action: action,
+    //   quantity: quantity,
+    //   csrfmiddlewaretoken: getCookie("csrftoken"),
+    // });
+    // location.reload();
+  });
+</script>
+{% endblock %} {% endif %} {% endblock %}

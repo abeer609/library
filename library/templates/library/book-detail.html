@@ -1,0 +1,53 @@
+{% extends 'base.html' %} {% block content %}
+<div class="row">
+  <div class="col-lg-9">
+    <div class="d-md-flex gap-md-4 rounded-2 border p-4">
+      <div>
+        <img
+          class="d-block mx-auto"
+          src="{{book.cover_image}}"
+          alt=""
+          srcset=""
+        />
+      </div>
+      <div>
+        <h4 class="mt-4 mt-md-0">{{book.title}}</h4>
+        <p class="text-secondary mb-1">
+          Author: {% for author in book.author.all %}
+          <a href=""><span>{{author.name}}</span></a
+          >&comma; {% endfor %}
+        </p>
+        <p class="text-secondary mb-1">
+          Publicaiton: <a href=""><span>{{book.publication.name}}</span></a>
+        </p>
+        <p class="text-secondary mb-1">
+          Category: <a href=""><span>{{book.category.title}}</span></a>
+        </p>
+        <p class="text-secondary mb-1">
+          Published: <span>{{book.published_at}}</span>
+        </p>
+        <p class="text-secondary mb-4">Pages: <span>{{book.pages}}</span></p>
+        <p class="text-secondary text-sm">
+          {{book.description | truncatechars:200}}
+        </p>
+        <h2 class="text-primary">{{book.price}} ৳</h2>
+        <form action="{% url 'add-to-cart' %}" method="post">
+          {%csrf_token%}
+          <input type="hidden" name="book_id" value="{{book.id}}" />
+          <button
+            type="submit"
+            class="btn btn-primary d-flex gap-2 align-items-center"
+          >
+            <i class="bi-bag"></i>
+            Add to cart
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <h5 class="text-secondary">Suggested books for you!</h5>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends 'base.html' %} {% block content %} {% load static %} {% if messages%}
+{% for message in messages %}
+<div class="alert alert-success alert-dismissible" role="alert">
+  {{message}}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+{% endfor %} {% endif %}
+<div class="row justify-content-end">
+  <div class="col-lg-6">
+    <form action="" method="get" class="mb-4 d-flex gap-2">
+      {% csrf_token %}
+      <div class="form-group flex-grow-1">
+        <input class="form-control" placeholder="Search book" name="search" type="text" />
+      </div>
+      <button class="btn btn-primary btn-sm">Search</button>
+    </form>
+  </div>
+</div>
+<div class="row g-4">
+  {% for book in books %}
+  <div class="col-sm-6 col-lg-4 col-xl-3">
+    <div class="card overflow-hidden">
+      <!-- <img src="{% static 'library/1.jpg' %}" class="card-img-top" alt="..." /> -->
+      <img class="book-image mx-auto mt-4" src="{{book.cover_image}}" alt="" />
+      <div class="card-body">
+        <a
+          class="link-offset-2 text-dark link-underline link-underline-opacity-0"
+          href="/books/{{book.id}}/"
+          ><p class="text-bold m-0">{{book.title}}</p></a
+        >
+        <p class="text-secondary text-sm">{{book.author_set.all}}</p>
+        {% if book.inventory > 5 %}
+        <p class="text-sm text-success">In Stock</p>
+        {% else %}
+        <p class="text-sm text-danger">Low Stock</p>
+        {% endif %}
+        <h5 class="mb-4 text-primary">{{book.price}}৳</h5>
+        <form action="{% url 'add-to-cart' %}" method="post">
+          {%csrf_token%}
+          <input type="hidden" name="book_id" value="{{book.id}}" />
+          <button
+            type="submit"
+            class="btn btn-primary d-flex gap-2 align-items-center"
+          >
+            <i class="bi-bag"></i>
+            Add to cart
+          </button>
+        </form>
+        <!-- <a href="#" class="btn btn-primary"> </a> -->
+      </div>
+    </div>
+  </div>
+  {%endfor %}
+</div>
+{% if page_obj.paginator.num_pages > 1%}
+<nav class="mt-4" aria-label="Page navigation example">
+  <ul class="pagination flex-wrap row-gap-1">
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="?page={{page_obj.previous_page_number}}"
+        aria-label="Previous"
+      >
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+      {% endif %}
+    </li>
+    {% for i in page_obj.paginator.page_range %} {%if page_obj.number == i %}
+    <li class="page-item active">
+      <a class="page-link" href="?page={{i}}">{{i}}</a>
+    </li>
+
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+    {% endif %} {% endfor %} {% if page_obj.has_next %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="?page={{page_obj.next_page_number}}"
+        aria-label="Next"
+      >
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %} {% endblock %} {% block script %}
+<script>
+  setTimeout(function () {
+    bootstrap.Alert.getOrCreateInstance(
+      document.querySelector(".alert")
+    ).close();
+  }, 2000);
+</script>
+{% endblock %}
