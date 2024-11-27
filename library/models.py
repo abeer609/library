@@ -7,13 +7,22 @@ from django.contrib.auth.models import User
 class Category(models.Model):
     title = models.CharField(max_length=50)
 
+    def __str__(self) -> str:
+        return self.title
+
 
 class Publication(models.Model):
     name = models.CharField(max_length=100)
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class Author(models.Model):
     name = models.CharField(max_length=100)
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class Book(models.Model):
@@ -28,6 +37,9 @@ class Book(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     pages = models.PositiveIntegerField()
     isbn = models.CharField(max_length=13, blank=True, null=True)
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class Cart(models.Model):
