@@ -24,6 +24,8 @@ def sign_up(request):
 
 
 def sign_in(request):
+    next = request.GET.get('next')
+
     if request.method == "GET":
         form = LoginForm()
         return render(request, "account/login.html", {"form": form})
@@ -35,6 +37,8 @@ def sign_in(request):
             user = authenticate(request, username=username, password=password)
             if user:
                 login(request, user)
+                if next:
+                    return redirect(next)
                 return redirect("home")
             else:
                 messages.error(request, f"Invalid username or password")

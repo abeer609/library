@@ -42,7 +42,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav p-2 me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <a
                 class="nav-link active"
@@ -56,11 +56,14 @@
                 >Admin</a
               >
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'cart' %}">Cart</a>
-            </li>
+            
           </ul>
           <ul class="navbar-nav mb-2 mb-lg-0 me-4">
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+              <a class="p-2 position-relative" href="{% url 'cart' %}"><i class="fs-4 bi-cart"></i> <span class="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">{{request.user.carts.first.items.count}}</span></a>
+            </li>
+            {% endif %}
             {% if user.is_authenticated %}
             <li class="nav-item dropdown">
               <a

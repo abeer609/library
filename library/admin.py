@@ -5,9 +5,13 @@ from .models import (
     Cart,
     CartItem,
     Category,
+    City,
     Order,
     OrderItem,
     Publication,
+    Region,
+    ShippingAddress,
+    Upazila,
 )
 from django.contrib.admin import TabularInline
 
@@ -16,8 +20,8 @@ from django.contrib.admin import TabularInline
 admin.site.register(Publication)
 admin.site.register(Cart)
 admin.site.register(CartItem)
-admin.site.register(Order)
 admin.site.register(OrderItem)
+admin.site.register([Region, City, Upazila, ShippingAddress])
 
 
 class AuthorInline(TabularInline):
@@ -40,3 +44,8 @@ class AuthorAdmin(admin.ModelAdmin):
 @admin.register(Category)
 class CateogryAdmin(admin.ModelAdmin):
     search_fields = ["title"]
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ["id", "status", "created_at"]

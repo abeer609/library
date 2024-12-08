@@ -15,7 +15,12 @@
     <form action="" method="get" class="mb-4 d-flex gap-2">
       {% csrf_token %}
       <div class="form-group flex-grow-1">
-        <input class="form-control" placeholder="Search book" name="search" type="text" />
+        <input
+          class="form-control"
+          placeholder="Search book"
+          name="search"
+          type="text"
+        />
       </div>
       <button class="btn btn-primary btn-sm">Search</button>
     </form>
@@ -39,19 +44,7 @@
         {% else %}
         <p class="text-sm text-danger">Low Stock</p>
         {% endif %}
-        <h5 class="mb-4 text-primary">{{book.price}}৳</h5>
-        <form action="{% url 'add-to-cart' %}" method="post">
-          {%csrf_token%}
-          <input type="hidden" name="book_id" value="{{book.id}}" />
-          <button
-            type="submit"
-            class="btn btn-primary d-flex gap-2 align-items-center"
-          >
-            <i class="bi-bag"></i>
-            Add to cart
-          </button>
-        </form>
-        <!-- <a href="#" class="btn btn-primary"> </a> -->
+        <h5 class="text-primary">{{book.price}}৳</h5>
       </div>
     </div>
   </div>

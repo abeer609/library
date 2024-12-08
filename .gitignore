@@ -1,2 +1,6 @@
 env
 __pycache__
+data.json
+templates/library/req.yml
+db.sqlite3.sql
+seed.py

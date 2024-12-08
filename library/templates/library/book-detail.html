@@ -1,4 +1,12 @@
 {% extends 'base.html' %} {% block content %}
+
+{% block head %}
+<script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script>
+{% endblock %}
+
+
+<div id="message"></div>
+
 <div class="row">
   <div class="col-lg-9">
     <div class="d-md-flex gap-md-4 rounded-2 border p-4">
@@ -30,24 +38,39 @@
         <p class="text-secondary text-sm">
           {{book.description | truncatechars:200}}
         </p>
-        <h2 class="text-primary">{{book.price}} ৳</h2>
-        <form action="{% url 'add-to-cart' %}" method="post">
+        <h2 class="mb-4 text-primary">{{book.price}} ৳</h2>
+        {% if user.is_authenticated %}
+        <form>
           {%csrf_token%}
-          <input type="hidden" name="book_id" value="{{book.id}}" />
           <button
+            hx-post=""
+            hx-target = "#message"
+            hx-swap = "innerHTML settle:2s"
+            hx-disabled-elt="this"
+            hx-indicator = "#indicator"
             type="submit"
             class="btn btn-primary d-flex gap-2 align-items-center"
           >
             <i class="bi-bag"></i>
             Add to cart
+            <div id="indicator" class="spinner-border spinner-border-sm htmx-indicator" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
           </button>
         </form>
+        {% else %}
+        <a class="btn btn-primary" href="{% url 'login' %}?next={% url 'book-detail' id=book.id%}">
+          <i class="bi-bag me-1"></i>
+          Add to cart
+        </a>
+        {% endif %}
       </div>
     </div>
   </div>
-  <div class="col-lg-3">
-    <h5 class="text-secondary">Suggested books for you!</h5>
-  </div>
 </div>
+
+{% endblock %}
+
+{% block script %}
 
 {% endblock %}

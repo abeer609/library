@@ -1,0 +1,7 @@
+{% load crispy_forms_tags %}
+    <form hx-trigger="submit" hx-post="{% url 'create-shipping' %}" hx-swap="outerHTML" hx-target="#address-form"  id='create-shipping'>
+        {% csrf_token%}
+        {{form | crispy }}
+        <button class="btn btn-primary" type="submit">Save</button>
+    </form>    
+</form>

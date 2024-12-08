@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-6924vv9%(x=5r#4#(^^l$i9g(&&hf@9lo67ve73ayb7zuayqnx"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -72,20 +72,22 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
+# local database
 DATABASES = {
-    "default": dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default="postgresql://postgres:postgres@localhost:5432/mysite",
-        conn_max_age=600,
-    )
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
 }
+
+# production
+# DATABASES = {
+#     "default": dj_database_url.config(
+#         # Replace this value with your local database's connection string.
+#         default="postgresql://library_f89h_user:nxqJdSGnP6kib9ytvK9jyZL8OR0SNRmE@dpg-ct3lg30gph6c73c0ljkg-a.oregon-postgres.render.com/library_f89h",
+#         conn_max_age=600,
+#     )
+# }
 
 
 # Password validation
@@ -176,9 +178,9 @@ JAZZMIN_SETTINGS = {
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
         # external url that opens in a new window (Permissions can be added)
         {
-            "name": "Support",
-            "url": "https://github.com/farridav/django-jazzmin/issues",
-            "new_window": True,
+            "name": "Visit site",
+            "url": "/",
+            "new_window": False,
         },
         # model admin to link to (Permissions checked against model)
         {"model": "auth.User"},

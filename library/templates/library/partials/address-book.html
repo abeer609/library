@@ -1,0 +1,17 @@
+<div id="address-form">
+  <form action="" method="post">
+    {% csrf_token %}
+    <div class="address-book mb-4">
+      {% for address in addresses %}
+        <input class="d-none" type="radio" name="shipping_id" value="{{address.id}}" :checked="{{address.id}} == selectedAddress?true:false" id="">
+        <div  @click="selectedAddress = {{address.id}}" :class="selectedAddress=={{address.id}}?'border-primary':''" class="flex-grow-1 border border-2 rounded p-2 mb-2 position-relative">
+          <h5>{{address.name}}</h5>
+          <p class="mb-0 mt-2">{{address.address}}</p>
+          <p class="mb-0">{{address.upazila}} - {{address.post_code}}</p>
+          <p class="mb-0">{{address.city}}, {{address.region}}</p>
+        </div>
+      {% endfor %}
+    </div>
+      <button  :class="!selectedAddress?'disabled':''" class="btn btn-primary">Checkout</button>
+  </form>
+</div>
