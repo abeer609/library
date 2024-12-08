@@ -153,7 +153,8 @@ JAZZMIN_SETTINGS = {
     "site_brand": "Library",
     # Logo to use for your site, must be present in static files, used for brand on top left
     # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
-    "login_logo": None,
+    "site_logo": "logo/logo.svg",
+    "login_logo": "logo/logo.svg",
     # Logo to use for login form in dark themes (defaults to login_logo)
     "login_logo_dark": None,
     # CSS classes that are applied to the logo above
@@ -163,10 +164,10 @@ JAZZMIN_SETTINGS = {
     # Welcome text on the login screen
     "welcome_sign": "Welcome to the library",
     # Copyright on the footer
-    "copyright": "Acme Library Ltd",
+    "copyright": "BDU Library",
     # List of model admins to search from the search bar, search bar omitted if excluded
     # If you want to use a single search field you dont need to use a list, you can use a simple string
-    "search_model": ["auth.User", "auth.Group", "library.Author"],
+    "search_model": ["auth.User", "auth.Group"],
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
     "user_avatar": None,
     ############

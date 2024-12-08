@@ -19,7 +19,7 @@ from django.contrib.admin import TabularInline
 # admin.site.register(Category)
 admin.site.register(Publication)
 admin.site.register(Cart)
-admin.site.register(CartItem)
+# admin.site.register(CartItem)
 admin.site.register(OrderItem)
 admin.site.register([Region, City, Upazila, ShippingAddress])
 
@@ -48,4 +48,9 @@ class CateogryAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ["id", "status", "created_at"]
+    list_display = ["id", "status", "total", "created_at"]
+
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ["book__title", "quantity"]
+    # search_fields = ["title"]
